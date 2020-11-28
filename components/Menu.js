@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { Animated, TouchableOpacity, Dimensions } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import { useDispatch, useSelector } from "react-redux";
+
 import MenuItem from "./MenuItem";
 
 const screenHeight = Dimensions.get("window").height;
@@ -9,19 +11,26 @@ const screenHeight = Dimensions.get("window").height;
 const Menu = () => {
   const [top, setTop] = useState(new Animated.Value(screenHeight));
 
+  const handleMenu = useSelector((state) => state.action);
+  const dispatch = useDispatch();
+
   useEffect(() => {
-    Animated.spring(top, {
-      toValue: 0,
-      useNativeDriver: false,
-    }).start();
-    return () => {};
-  }, []);
+    toggleMenu();
+  }, [handleMenu]);
 
   const toggleMenu = () => {
-    Animated.spring(top, {
-      toValue: 1200, //this instead of screen height because a problem at close
-      useNativeDriver: false,
-    }).start();
+    if (handleMenu == "openMenu") {
+      Animated.spring(top, {
+        toValue: 54,
+        useNativeDriver: false,
+      }).start();
+    }
+    if (handleMenu == "closeMenu") {
+      Animated.spring(top, {
+        toValue: 1200, //this instead of screen height because a problem at close
+        useNativeDriver: false,
+      }).start();
+    }
   };
 
   return (
@@ -32,7 +41,7 @@ const Menu = () => {
         <Subtitle>Developer that Design</Subtitle>
       </Cover>
       <TouchableOpacity
-        onPress={toggleMenu}
+        onPress={() => dispatch({ type: "CLOSE_MENU" })}
         style={{
           position: "absolute",
           top: 120,
@@ -103,6 +112,8 @@ const Container = styled.View`
   width: 100%;
   height: 100%;
   z-index: 100;
+  border-radius: 10px;
+  overflow: hidden;
 `;
 
 const AnimatedContainer = Animated.createAnimatedComponent(Container);
