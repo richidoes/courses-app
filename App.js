@@ -3,6 +3,7 @@ import { createStore } from "redux";
 import { Provider } from "react-redux";
 
 import HomeScreen from "./screens/HomeScreen";
+import AppNavigation from "./navigation/AppNavigation";
 
 const initialState = {
   action: "",
@@ -27,7 +28,7 @@ const store = createStore(reducer);
 export default function App() {
   return (
     <Provider store={store}>
-      <HomeScreen />
+      <AppNavigation />
     </Provider>
   );
 }

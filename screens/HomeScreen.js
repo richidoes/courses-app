@@ -17,7 +17,7 @@ import Course from "../components/Course";
 import Menu from "../components/Menu";
 import Avatar from "../components/Avatar";
 
-export default function HomeScreen() {
+export default function HomeScreen({ navigation }) {
   const [scale, setScale] = useState(new Animated.Value(1));
   const [opacity, setOpacity] = useState(new Animated.Value(1));
 
@@ -108,14 +108,20 @@ export default function HomeScreen() {
               showsHorizontalScrollIndicator={false}
             >
               {Cards.map((card, index) => (
-                <Card
+                <TouchableOpacity
                   key={index}
-                  title={card.title}
-                  image={card.image}
-                  caption={card.caption}
-                  logo={card.logo}
-                  subtitle={card.subtitle}
-                />
+                  onPress={() => {
+                    navigation.navigate("Section");
+                  }}
+                >
+                  <Card
+                    title={card.title}
+                    image={card.image}
+                    caption={card.caption}
+                    logo={card.logo}
+                    subtitle={card.subtitle}
+                  />
+                </TouchableOpacity>
               ))}
             </ScrollView>
             <Subtitle>Popular Courses</Subtitle>
@@ -155,7 +161,8 @@ const Subtitle = styled.Text`
 const Container = styled.View`
   flex: 1;
   background-color: #f0f3f5;
-  border-radius: 10px;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
 `;
 
 const AnimatedContainer = Animated.createAnimatedComponent(Container);
