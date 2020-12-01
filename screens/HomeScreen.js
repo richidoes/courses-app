@@ -111,7 +111,9 @@ export default function HomeScreen({ navigation }) {
                 <TouchableOpacity
                   key={index}
                   onPress={() => {
-                    navigation.navigate("Section");
+                    navigation.navigate("Section", {
+                      section: card,
+                    });
                   }}
                 >
                   <Card
