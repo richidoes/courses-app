@@ -1,9 +1,37 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { Dimensions } from "react-native";
 import styled from "styled-components";
 
+const screenWidth = Dimensions.get("window").width;
+
+function getCourseWidth(screenWidth) {
+  let cardWidth = screenWidth - 40;
+  if (screenWidth >= 768) {
+    cardWidth = (screenWidth - 60) / 2;
+  }
+
+  if (screenWidth >= 1024) {
+    cardWidth = (screenWidth - 80) / 3;
+  }
+  return cardWidth;
+}
+
 const Course = (props) => {
+  const [cardWidth, setCardWidth] = useState(getCourseWidth(screenWidth));
+
+  const adaptLayout = (dimensions) => {
+    setCardWidth(getCourseWidth(dimensions.window.width));
+  };
+
+  useEffect(() => {
+    Dimensions.addEventListener("change", adaptLayout);
+    return () => {
+      Dimensions.removeEventListener("change", adaptLayout);
+    };
+  }, []);
+
   return (
-    <Container style={boxShadow}>
+    <Container style={{ width: cardWidth, elevation: 8 }}>
       <Cover>
         <Image source={props.image} />
         <Logo source={props.logo} resizeMode="contain" />
@@ -25,18 +53,10 @@ const Container = styled.View`
   width: 335px;
   height: 335px;
   background: white;
-  margin: 10px 20px;
+  margin: 10px 10px;
   border-radius: 14px;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
 `;
-
-const boxShadow = {
-  shadowColor: "black",
-  shadowOpacity: 0.05,
-  shadowOffset: { width: 0, height: 2 },
-  shadowRadius: 10,
-  elevation: 8,
-};
 
 const Cover = styled.View`
   height: 260px;

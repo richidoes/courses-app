@@ -7,6 +7,12 @@ import { useDispatch, useSelector } from "react-redux";
 import MenuItem from "./MenuItem";
 
 const screenHeight = Dimensions.get("window").height;
+const ScreenWidth = Dimensions.get("window").width;
+let cardWidth = ScreenWidth;
+
+if (cardWidth >= 500) {
+  cardWidth = 500;
+}
 
 const Menu = () => {
   const [top, setTop] = useState(new Animated.Value(screenHeight));
@@ -109,7 +115,8 @@ const boxShadow = {
 const Container = styled.View`
   position: absolute;
   background: white;
-  width: 100%;
+  width: ${cardWidth}px;
+  align-self: center;
   height: 100%;
   z-index: 100;
   border-radius: 10px;

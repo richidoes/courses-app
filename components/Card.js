@@ -5,11 +5,11 @@ const Card = (props) => {
   return (
     <Container style={boxShadow}>
       <Cover>
-        <Image source={props.image} />
+        <Image source={{ uri: props.image.url }} />
         <Title>{props.title}</Title>
       </Cover>
       <Content>
-        <Logo source={props.logo} resizeMode="contain" />
+        <Logo source={{ uri: props.logo.url }} resizeMode="contain" />
         <Wrapper>
           <Caption>{props.caption}</Caption>
           <Subtitle>{props.subtitle}</Subtitle>
@@ -55,18 +55,12 @@ const Container = styled.View`
   width: 315px;
   height: 280px;
   border-radius: 14px;
-  margin-top: 20px;
-  margin-left: 20px;
-  margin-bottom: 20px;
+  margin: 20px 10px;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
 `;
 
 const boxShadow = {
-  shadowColor: "black",
-  shadowOpacity: 0.05,
-  shadowOffset: { width: 0, height: 2 },
-  shadowRadius: 10,
-  elevation: 8,
+  elevation: 10,
 };
 
 const Cover = styled.View`

@@ -1,14 +1,13 @@
 import React from "react";
 import { createStore } from "redux";
 import { Provider } from "react-redux";
-import { ApolloClient, InMemoryCache } from "apollo-boost";
-import { ApolloProvider } from "react-apollo";
+import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client";
 
 import HomeScreen from "./screens/HomeScreen";
 import AppNavigation from "./navigation/AppNavigation";
 
 const client = new ApolloClient({
-  link: `https://graphql.contentful.com/content/v1/spaces/ldcl3ayg0mhx`,
+  uri: `https://graphql.contentful.com/content/v1/spaces/ldcl3ayg0mhx`,
   credentials: "same-origin",
   cache: new InMemoryCache(),
   headers: {

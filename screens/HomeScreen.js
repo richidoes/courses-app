@@ -9,6 +9,7 @@ import {
 } from "react-native";
 import styled from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
+import { gql, useQuery } from "@apollo/client";
 
 import Card from "../components/Card";
 import { NotificationIcon } from "../components/Icons";
@@ -16,6 +17,40 @@ import Logo from "../components/Logo";
 import Course from "../components/Course";
 import Menu from "../components/Menu";
 import Avatar from "../components/Avatar";
+
+const CardsQuery = gql`
+  {
+    cardsCollection {
+      items {
+        title
+        subtitle
+        image {
+          title
+          description
+          contentType
+          fileName
+          size
+          url
+          width
+          height
+        }
+        subtitle
+        caption
+        logo {
+          title
+          description
+          contentType
+          fileName
+          size
+          url
+          width
+          height
+        }
+        content
+      }
+    }
+  }
+`;
 
 export default function HomeScreen({ navigation }) {
   const [scale, setScale] = useState(new Animated.Value(1));
@@ -29,6 +64,10 @@ export default function HomeScreen({ navigation }) {
   });
   const dispatch = useDispatch();
   // console.log(handleState);
+
+  useEffect(() => {
+    StatusBar.setBarStyle("dark-content", true);
+  }, []);
 
   useEffect(() => {
     toggleMenu();
@@ -63,6 +102,38 @@ export default function HomeScreen({ navigation }) {
 
       StatusBar.setBarStyle("dark-content", true);
     }
+  };
+
+  const QueryCards = () => {
+    const { data, loading, error } = useQuery(CardsQuery);
+
+    if (loading) return <Message>Loading...</Message>;
+    // console.log(data.cardsCollection.items);
+    if (error) return <Message>Error...</Message>;
+
+    return (
+      <CardsContainer>
+        {data.cardsCollection.items.map((card, index) => (
+          <TouchableOpacity
+            key={index}
+            onPress={() => {
+              navigation.navigate("Section", {
+                section: card,
+              });
+            }}
+          >
+            <Card
+              title={card.title}
+              image={card.image}
+              caption={card.caption}
+              logo={card.logo}
+              subtitle={card.subtitle}
+              content={card.content}
+            />
+          </TouchableOpacity>
+        ))}
+      </CardsContainer>
+    );
   };
 
   return (
@@ -107,44 +178,47 @@ export default function HomeScreen({ navigation }) {
               style={{ paddingBottom: 30 }}
               showsHorizontalScrollIndicator={false}
             >
-              {Cards.map((card, index) => (
-                <TouchableOpacity
-                  key={index}
-                  onPress={() => {
-                    navigation.navigate("Section", {
-                      section: card,
-                    });
-                  }}
-                >
-                  <Card
-                    title={card.title}
-                    image={card.image}
-                    caption={card.caption}
-                    logo={card.logo}
-                    subtitle={card.subtitle}
-                  />
-                </TouchableOpacity>
-              ))}
+              <QueryCards />
             </ScrollView>
             <Subtitle>Popular Courses</Subtitle>
-            {courses.map((course, index) => (
-              <Course
-                key={index}
-                image={course.image}
-                title={course.title}
-                subtitle={course.subtitle}
-                logo={course.logo}
-                author={course.author}
-                avatar={course.avatar}
-                caption={course.caption}
-              />
-            ))}
+            <CoursesContainer>
+              {courses.map((course, index) => (
+                <Course
+                  key={index}
+                  image={course.image}
+                  title={course.title}
+                  subtitle={course.subtitle}
+                  logo={course.logo}
+                  author={course.author}
+                  avatar={course.avatar}
+                  caption={course.caption}
+                />
+              ))}
+            </CoursesContainer>
           </ScrollView>
         </SafeAreaView>
       </AnimatedContainer>
     </RootView>
   );
 }
+
+const CoursesContainer = styled.View`
+  flex-direction: row;
+  flex-wrap: wrap;
+  padding-left: 10px;
+`;
+
+const Message = styled.Text`
+  margin: 20px;
+  color: #b8bece;
+  font-size: 15px;
+  font-weight: 500;
+`;
+
+const CardsContainer = styled.View`
+  flex-direction: row;
+  padding-left: 10px;
+`;
 
 const RootView = styled.View`
   background: black;
@@ -211,37 +285,6 @@ const logos = [
   {
     image: require("../assets/firebase.png"),
     text: "Firebase",
-  },
-];
-
-const Cards = [
-  {
-    title: "React Native Basics",
-    image: require("../assets/background11.jpg"),
-    subtitle: "React Native",
-    caption: "1 of 12 sections",
-    logo: require("../assets/logo-react.png"),
-  },
-  {
-    title: "Redux Basics",
-    image: require("../assets/background12.jpg"),
-    subtitle: "Redux",
-    caption: "2 of 12 sections",
-    logo: require("../assets/redux.png"),
-  },
-  {
-    title: "Styled Components Basics",
-    image: require("../assets/background13.jpg"),
-    subtitle: "Styled Components",
-    caption: "3 of 12 sections",
-    logo: require("../assets/styled.png"),
-  },
-  {
-    title: "Figma Basics",
-    image: require("../assets/background14.jpg"),
-    subtitle: "Figma",
-    caption: "4 of 12 sections",
-    logo: require("../assets/logo-figma.png"),
   },
 ];
 
