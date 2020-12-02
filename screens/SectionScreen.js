@@ -1,17 +1,23 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import { Ionicons } from "@expo/vector-icons";
-import { TouchableOpacity, StatusBar, Linking, ScrollView } from "react-native";
+import {
+  TouchableOpacity,
+  StatusBar,
+  ScrollView,
+  Platform,
+} from "react-native";
 import MarkdownView from "react-native-showdown";
 
 function SectionScreen({ navigation }) {
   // console.log(navigation.getParam("section"));
   const section = navigation.getParam("section");
-  const ref = useRef("webview");
 
   useEffect(() => {
     StatusBar.setBarStyle("light-content", true);
-
+    if (Platform.OS === "ios") {
+      StatusBar.setHidden(true);
+    }
     return () => {
       StatusBar.setBarStyle("dark-content", true);
     };
@@ -160,10 +166,6 @@ const CloseView = styled.View`
 `;
 
 const boxShadow = {
-  shadowColor: "black",
-  shadowOpacity: 0.05,
-  shadowOffset: { width: 0, height: 2 },
-  shadowRadius: 10,
   elevation: 8,
 };
 
