@@ -10,6 +10,7 @@ import {
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useDispatch } from "react-redux";
+import { LinearGradient } from "expo-linear-gradient";
 
 const screenWidth = Dimensions.get("window").width;
 const screenHeight = Dimensions.get("window").height;
@@ -20,6 +21,7 @@ const Project = (props) => {
   const [cardHeight] = useState(new Animated.Value(460));
   const [titleTop] = useState(new Animated.Value(20));
   const [opacity] = useState(new Animated.Value(0));
+  const [textHeight] = useState(new Animated.Value(100));
 
   const dispatch = useDispatch();
 
@@ -45,6 +47,10 @@ const Project = (props) => {
     }
     Animated.spring(titleTop, { toValue: 45, useNativeDriver: false }).start();
     Animated.timing(opacity, { toValue: 1, useNativeDriver: false }).start();
+    Animated.spring(textHeight, {
+      toValue: 1000,
+      useNativeDriver: false,
+    }).start();
 
     dispatch({
       type: "OPEN_CARD",
@@ -66,6 +72,10 @@ const Project = (props) => {
 
     Animated.spring(titleTop, { toValue: 20, useNativeDriver: false }).start();
     Animated.timing(opacity, { toValue: 0, useNativeDriver: false }).start();
+    Animated.spring(textHeight, {
+      toValue: 100,
+      useNativeDriver: false,
+    }).start();
 
     dispatch({
       type: "CLOSE_CARD",
@@ -82,7 +92,18 @@ const Project = (props) => {
           <AnimatedTitle style={{ top: titleTop }}>{props.title}</AnimatedTitle>
           <Author>by {props.author}</Author>
         </Cover>
-        <Text>{props.text}</Text>
+        <AnimatedText style={{ height: textHeight }}>{props.text}</AnimatedText>
+        <AnimatedLinearGradient style={{ height: textHeight }}>
+          <LinearGradient
+            colors={["rgba(255, 255, 255, 0)", "rgba(255, 255, 255, 1)"]}
+            style={{
+              position: "absolute",
+              top: -95,
+              width: "100%",
+              height: "100%",
+            }}
+          />
+        </AnimatedLinearGradient>
         <TouchableOpacity
           style={{ position: "absolute", top: 45, right: 20 }}
           onPress={() => closeCard()}
@@ -97,6 +118,10 @@ const Project = (props) => {
 };
 
 export default Project;
+
+const Gradient = styled.View``;
+
+const AnimatedLinearGradient = Animated.createAnimatedComponent(Gradient);
 
 const CloseView = styled.View`
   width: 32px;
@@ -158,3 +183,5 @@ const Text = styled.Text`
   line-height: 24px;
   color: #3c4560;
 `;
+
+const AnimatedText = Animated.createAnimatedComponent(Text);

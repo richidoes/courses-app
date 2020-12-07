@@ -20,6 +20,7 @@ function ProjectsScreen() {
   const [thirdScale] = useState(new Animated.Value(0.8));
   const [ThirdTranslateY] = useState(new Animated.Value(-50));
   const [index, setIndex] = useState(0);
+  const [opacity] = useState(new Animated.Value(0));
 
   const handleState = useSelector((state) => {
     return { action: state.action };
@@ -53,6 +54,8 @@ function ProjectsScreen() {
         toValue: 44,
         useNativeDriver: false,
       }).start();
+
+      Animated.timing(opacity, { toValue: 1, useNativeDriver: false }).start();
     },
 
     onPanResponderMove: Animated.event([null, { dx: pan.x, dy: pan.y }], {
@@ -62,6 +65,9 @@ function ProjectsScreen() {
     onPanResponderRelease: () => {
       const positionY = pan.y.__getValue();
       // console.log(positionY); get the position on release the card
+
+      Animated.timing(opacity, { toValue: 0, useNativeDriver: false }).start();
+
       if (positionY > 200) {
         Animated.timing(pan, {
           toValue: { x: 0, y: 1000 },
@@ -103,6 +109,7 @@ function ProjectsScreen() {
 
   return (
     <Container>
+      <AnimatedMask style={{ opacity: opacity }} />
       <Animated.View
         style={{ transform: [{ translateX: pan.x }, { translateY: pan.y }] }}
         {...panRespoder.panHandlers}
@@ -161,6 +168,18 @@ function ProjectsScreen() {
 
 export default ProjectsScreen;
 
+const Mask = styled.View`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.25);
+  z-index: -3;
+`;
+
+const AnimatedMask = Animated.createAnimatedComponent(Mask);
+
 const Container = styled.View`
   flex: 1;
   justify-content: center;
@@ -170,11 +189,11 @@ const Container = styled.View`
 
 const projects = [
   {
-    title: "Courses - mock app to learning",
+    title: "Courses - mock app for learning",
     image: require("../assets/background5.jpg"),
     author: "Ricardo De Leon",
     text:
-      "Thanks to Design+Code, I improve my design skill and learned to do animations for my app Courses, an app for my portfolio.",
+      "Thanks to Design+Code, I improve my design skill and learned to do animations for my app Courses, a mock app for my portfolio. Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.",
   },
   {
     title: "Wonder App - vodka reviews",
