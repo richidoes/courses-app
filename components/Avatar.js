@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 export default function Avatar() {
   const [photo, setPhoto] = useState("");
-  const [randomUser, setRandomUser] = useState(rng(1, 12));
+  const [randomUser, setRandomUser] = useState(rng(1, 11));
 
   //random number generator
   function rng(min, max) {

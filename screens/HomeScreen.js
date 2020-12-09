@@ -17,6 +17,7 @@ import Logo from "../components/Logo";
 import Course from "../components/Course";
 import Menu from "../components/Menu";
 import Avatar from "../components/Avatar";
+import ModalLogin from "../components/ModalLogin";
 
 const CardsQuery = gql`
   {
@@ -53,8 +54,8 @@ const CardsQuery = gql`
 `;
 
 export default function HomeScreen({ navigation }) {
-  const [scale, setScale] = useState(new Animated.Value(1));
-  const [opacity, setOpacity] = useState(new Animated.Value(1));
+  const [scale] = useState(new Animated.Value(1));
+  const [opacity] = useState(new Animated.Value(1));
 
   const handleState = useSelector((state) => {
     return {
@@ -63,7 +64,6 @@ export default function HomeScreen({ navigation }) {
     };
   });
   const dispatch = useDispatch();
-  // console.log(handleState);
 
   useEffect(() => {
     StatusBar.setBarStyle("dark-content", true);
@@ -136,6 +136,13 @@ export default function HomeScreen({ navigation }) {
     );
   };
 
+  const handleUser = () => {
+    return {
+      openMenu: () => dispatch({ type: "OPEN_MENU" }),
+      openLogin: () => dispatch({ type: "OPEN_LOGIN" }),
+    };
+  };
+
   return (
     <RootView>
       <Menu />
@@ -146,7 +153,7 @@ export default function HomeScreen({ navigation }) {
           <ScrollView showsVerticalScrollIndicator={false}>
             <TitleBar>
               <TouchableOpacity
-                onPress={() => dispatch({ type: "OPEN_MENU" })}
+                onPress={() => handleUser().openLogin()}
                 style={{ position: "absolute", top: 0, left: 20 }}
               >
                 <Avatar />
@@ -198,6 +205,7 @@ export default function HomeScreen({ navigation }) {
           </ScrollView>
         </SafeAreaView>
       </AnimatedContainer>
+      <ModalLogin />
     </RootView>
   );
 }
