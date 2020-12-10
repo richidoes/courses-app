@@ -1,41 +1,49 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
-import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function Avatar() {
-  const [photo, setPhoto] = useState("");
-  const [randomUser, setRandomUser] = useState(rng(1, 11));
-
-  //random number generator
-  function rng(min, max) {
-    return Math.floor(Math.random() * (max - min + 1) + min);
-  }
-
-  const handleState = useSelector((state) => state.name);
+  const handleState = useSelector((state) => {
+    return {
+      name: state.name,
+      avatar: state.avatar,
+    };
+  });
   const dispatch = useDispatch();
-  function updateName(first_name, last_name) {
-    dispatch({
-      type: "UPDATE_NAME",
-      name: `${first_name} ${last_name}`,
+
+  function handleUser() {
+    return {
+      updateName: (name) =>
+        dispatch({
+          type: "UPDATE_NAME",
+          name,
+        }),
+      updateAvatar: (avatar) =>
+        dispatch({
+          type: "UPDATE_AVATAR",
+          avatar,
+        }),
+    };
+  }
+
+  function loadState() {
+    AsyncStorage.getItem("state").then((serializedState) => {
+      const state = JSON.parse(serializedState);
+      console.log(state);
+
+      if (state) {
+        handleUser().updateName(state.name);
+        handleUser().updateAvatar(state.avatar);
+      }
     });
   }
 
-  //api req
   useEffect(() => {
-    axios.get(`https://reqres.in/api/users/${randomUser}`).then((user) => {
-      const userData = user.data.data;
-      // console.log(userData);
-      setPhoto(userData.avatar);
-      // updateName(userData.first_name, userData.last_name);
-    });
+    loadState();
   }, []);
 
-  return (
-    <Image
-      source={photo ? { uri: photo } : require("../assets/avatar-default.jpg")}
-    />
-  );
+  return <Image source={{ uri: handleState.avatar }} />;
 }
 
 const Image = styled.Image`

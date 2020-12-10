@@ -144,7 +144,7 @@ export default function HomeScreen({ navigation }) {
   };
 
   const handleAvatar = () => {
-    if (handleState.name) {
+    if (handleState.name !== "Stranger") {
       handleUser().openMenu();
     } else {
       handleUser().openLogin();

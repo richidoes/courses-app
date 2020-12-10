@@ -49,13 +49,21 @@ const Menu = () => {
           name,
         });
       },
+      updateAvatar: (avatar) =>
+        dispatch({
+          type: "UPDATE_AVATAR",
+          avatar,
+        }),
     };
   };
 
   const handleLogout = (index) => {
     if (index === 3) {
       handleMenu().closeMenu();
-      handleMenu().updateName();
+      handleMenu().updateName("Stranger");
+      handleMenu().updateAvatar(
+        "https://share.getcloudapp.com/bLu0r6GN/download/avatar-default.jpg?k=7987709d&utm_source=viewer_new"
+      );
       AsyncStorage.clear();
     }
   };

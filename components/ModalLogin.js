@@ -11,10 +11,12 @@ import styled from "styled-components";
 import { BlurView } from "expo-blur";
 import { useDispatch, useSelector } from "react-redux";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import axios from "axios";
 
 import { auth } from "./Firebase";
 import Success from "./Success";
 import Loading from "./Loading";
+import { saveState } from "./AsyncStorage";
 
 const screenHeight = Dimensions.get("window").height;
 
@@ -31,6 +33,7 @@ export default function ModalLogin() {
   const [top] = useState(new Animated.Value(screenHeight));
   const [scale] = useState(new Animated.Value(1.3));
   const [translateY] = useState(new Animated.Value(0));
+  const [randomUser] = useState(rng(1, 11));
 
   const handleState = useSelector((state) => {
     return {
@@ -39,13 +42,11 @@ export default function ModalLogin() {
   });
   const dispatch = useDispatch();
 
-  const storeName = async (name) => {
-    try {
-      await AsyncStorage.setItem("name", name);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  //random number generator
+  function rng(min, max) {
+    return Math.floor(Math.random() * (max - min + 1) + min);
+  }
+
   const retrieveName = async () => {
     try {
       const name = await AsyncStorage.getItem("name");
@@ -117,7 +118,24 @@ export default function ModalLogin() {
           name,
         });
       },
+      updateAvatar: (avatar) =>
+        dispatch({
+          type: "UPDATE_AVATAR",
+          avatar,
+        }),
     };
+  }
+
+  //api req
+  function getUser() {
+    axios.get(`https://reqres.in/api/users/${randomUser}`).then((user) => {
+      const userData = user.data.data;
+      const name = `${userData.first_name} ${userData.last_name}`;
+      const avatar = userData.avatar;
+
+      saveState({ name, avatar });
+      handleUser().updateAvatar(avatar);
+    });
   }
 
   function handleLogin() {
@@ -133,7 +151,8 @@ export default function ModalLogin() {
           setIsSuccessful(true);
 
           Alert.alert("Congrats", "You've logged Successfully!");
-          storeName(response.user.email);
+
+          getUser();
           handleUser().updateName(response.user.email);
 
           setTimeout(() => {
