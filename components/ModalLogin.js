@@ -10,7 +10,9 @@ import {
 import styled from "styled-components";
 import { BlurView } from "expo-blur";
 import { useDispatch, useSelector } from "react-redux";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
+import { auth } from "./Firebase";
 import Success from "./Success";
 import Loading from "./Loading";
 
@@ -37,6 +39,31 @@ export default function ModalLogin() {
   });
   const dispatch = useDispatch();
 
+  const storeName = async (name) => {
+    try {
+      await AsyncStorage.setItem("name", name);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const retrieveName = async () => {
+    try {
+      const name = await AsyncStorage.getItem("name");
+      if (name !== null) {
+        console.log(name);
+        handleUser().updateName(name);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  //async storage
+  useEffect(() => {
+    retrieveName();
+  }, []);
+
+  //animation changes
   useEffect(() => {
     if (handleState.action === "openLogin") {
       Animated.timing(top, {
@@ -84,22 +111,41 @@ export default function ModalLogin() {
         dispatch({
           type: "CLOSE_LOGIN",
         }),
+      updateName: (name) => {
+        dispatch({
+          type: "UPDATE_NAME",
+          name,
+        });
+      },
     };
   }
 
   function handleLogin() {
+    Keyboard.dismiss();
     setIsLoading(true);
 
-    setTimeout(() => {
-      setIsLoading(false);
-      setIsSuccessful(true);
+    auth
+      .signInWithEmailAndPassword(formData.email, formData.password)
+      .then((response) => {
+        setIsLoading(false);
 
-      Alert.alert("Congrats", "You've logged Successfully!");
-      setTimeout(() => {
-        handleUser().closeLogin();
-        setIsSuccessful(false);
-      }, 1000);
-    }, 2000);
+        if (response) {
+          setIsSuccessful(true);
+
+          Alert.alert("Congrats", "You've logged Successfully!");
+          storeName(response.user.email);
+          handleUser().updateName(response.user.email);
+
+          setTimeout(() => {
+            handleUser().closeLogin();
+            setIsSuccessful(false);
+          }, 1000);
+        }
+      })
+      .catch((error) => {
+        setIsLoading(false);
+        Alert.alert("Error", error.message);
+      });
   }
 
   //handle input change

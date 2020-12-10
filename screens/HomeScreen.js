@@ -143,6 +143,13 @@ export default function HomeScreen({ navigation }) {
     };
   };
 
+  const handleAvatar = () => {
+    if (handleState.name) {
+      handleUser().openMenu();
+    } else {
+      handleUser().openLogin();
+    }
+  };
   return (
     <RootView>
       <Menu />
@@ -153,7 +160,7 @@ export default function HomeScreen({ navigation }) {
           <ScrollView showsVerticalScrollIndicator={false}>
             <TitleBar>
               <TouchableOpacity
-                onPress={() => handleUser().openLogin()}
+                onPress={() => handleAvatar()}
                 style={{ position: "absolute", top: 0, left: 20 }}
               >
                 <Avatar />

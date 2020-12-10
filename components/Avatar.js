@@ -27,7 +27,7 @@ export default function Avatar() {
       const userData = user.data.data;
       // console.log(userData);
       setPhoto(userData.avatar);
-      updateName(userData.first_name, userData.last_name);
+      // updateName(userData.first_name, userData.last_name);
     });
   }, []);
 

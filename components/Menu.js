@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { Animated, TouchableOpacity, Dimensions } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useDispatch, useSelector } from "react-redux";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import MenuItem from "./MenuItem";
 
@@ -15,27 +16,47 @@ if (cardWidth >= 500) {
 }
 
 const Menu = () => {
-  const [top, setTop] = useState(new Animated.Value(screenHeight));
+  const [top] = useState(new Animated.Value(screenHeight));
 
-  const handleMenu = useSelector((state) => state.action);
+  const handleState = useSelector((state) => state.action);
   const dispatch = useDispatch();
 
   useEffect(() => {
     toggleMenu();
-  }, [handleMenu]);
+  }, [handleState]);
 
   const toggleMenu = () => {
-    if (handleMenu == "openMenu") {
+    if (handleState == "openMenu") {
       Animated.spring(top, {
         toValue: 54,
         useNativeDriver: false,
       }).start();
     }
-    if (handleMenu == "closeMenu") {
+    if (handleState == "closeMenu") {
       Animated.spring(top, {
         toValue: 1200, //this instead of screen height because a problem at close
         useNativeDriver: false,
       }).start();
+    }
+  };
+
+  const handleMenu = () => {
+    return {
+      closeMenu: () => dispatch({ type: "CLOSE_MENU" }),
+      updateName: (name) => {
+        dispatch({
+          type: "UPDATE_NAME",
+          name,
+        });
+      },
+    };
+  };
+
+  const handleLogout = (index) => {
+    if (index === 3) {
+      handleMenu().closeMenu();
+      handleMenu().updateName();
+      AsyncStorage.clear();
     }
   };
 
@@ -47,7 +68,7 @@ const Menu = () => {
         <Subtitle>Developer that Design</Subtitle>
       </Cover>
       <TouchableOpacity
-        onPress={() => dispatch({ type: "CLOSE_MENU" })}
+        onPress={() => handleMenu().closeMenu()}
         style={{
           position: "absolute",
           top: 120,
@@ -62,12 +83,9 @@ const Menu = () => {
       </TouchableOpacity>
       <Content>
         {items.map((item, index) => (
-          <MenuItem
-            key={index}
-            icon={item.icon}
-            title={item.title}
-            text={item.text}
-          />
+          <TouchableOpacity key={index} onPress={() => handleLogout(index)}>
+            <MenuItem icon={item.icon} title={item.title} text={item.text} />
+          </TouchableOpacity>
         ))}
       </Content>
     </AnimatedContainer>
