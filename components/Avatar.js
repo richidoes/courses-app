@@ -12,7 +12,7 @@ export default function Avatar() {
   });
   const dispatch = useDispatch();
 
-  function handleUser() {
+  function dispatcher() {
     return {
       updateName: (name) =>
         dispatch({
@@ -30,11 +30,11 @@ export default function Avatar() {
   function loadState() {
     AsyncStorage.getItem("state").then((serializedState) => {
       const state = JSON.parse(serializedState);
-      console.log(state);
+      // console.log(state);
 
       if (state) {
-        handleUser().updateName(state.name);
-        handleUser().updateAvatar(state.avatar);
+        dispatcher().updateName(state.name);
+        dispatcher().updateAvatar(state.avatar);
       }
     });
   }

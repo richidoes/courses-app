@@ -12,7 +12,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { gql, useQuery } from "@apollo/client";
 
 import Card from "../components/Card";
-import { NotificationIcon } from "../components/Icons";
 import Logo from "../components/Logo";
 import Course from "../components/Course";
 import Menu from "../components/Menu";
