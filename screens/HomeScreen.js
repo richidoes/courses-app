@@ -18,6 +18,8 @@ import Course from "../components/Course";
 import Menu from "../components/Menu";
 import Avatar from "../components/Avatar";
 import ModalLogin from "../components/ModalLogin";
+import NotificationButton from "../components/NotificationButton";
+import Notifications from "../components/Notifications";
 
 const CardsQuery = gql`
   {
@@ -136,23 +138,25 @@ export default function HomeScreen({ navigation }) {
     );
   };
 
-  const handleUser = () => {
+  const dispatcher = () => {
     return {
       openMenu: () => dispatch({ type: "OPEN_MENU" }),
       openLogin: () => dispatch({ type: "OPEN_LOGIN" }),
+      openNotif: () => dispatch({ type: "OPEN_NOTIF" }),
     };
   };
 
   const handleAvatar = () => {
     if (handleState.name !== "Stranger") {
-      handleUser().openMenu();
+      dispatcher().openMenu();
     } else {
-      handleUser().openLogin();
+      dispatcher().openLogin();
     }
   };
   return (
     <RootView>
       <Menu />
+      <Notifications />
       <AnimatedContainer
         style={{ transform: [{ scale: scale }], opacity: opacity }}
       >
@@ -167,9 +171,12 @@ export default function HomeScreen({ navigation }) {
               </TouchableOpacity>
               <Title>Welcome back</Title>
               <Name>{handleState.name}</Name>
-              <NotificationIcon
+              <TouchableOpacity
+                onPress={() => dispatcher().openNotif()}
                 style={{ position: "absolute", right: 20, top: 5 }}
-              />
+              >
+                <NotificationButton />
+              </TouchableOpacity>
             </TitleBar>
             <ScrollView
               style={{
