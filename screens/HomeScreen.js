@@ -19,34 +19,21 @@ import Avatar from "../components/Avatar";
 import ModalLogin from "../components/ModalLogin";
 import NotificationButton from "../components/NotificationButton";
 import Notifications from "../components/Notifications";
+import { logos, courses } from "../components/LocalData";
 
 const CardsQuery = gql`
   {
-    cardsCollection {
+    cardsCollection(order: [caption_ASC]) {
       items {
         title
         subtitle
         image {
-          title
-          description
-          contentType
-          fileName
-          size
           url
-          width
-          height
         }
         subtitle
         caption
         logo {
-          title
-          description
-          contentType
-          fileName
-          size
           url
-          width
-          height
         }
         content
       }
@@ -281,71 +268,3 @@ const TitleBar = styled.View`
   margin-top: 60px;
   padding-left: 80px;
 `;
-
-const logos = [
-  {
-    image: require("../assets/logo-react.png"),
-    text: "React",
-  },
-  {
-    image: require("../assets/redux.png"),
-    text: "Redux",
-  },
-  {
-    image: require("../assets/styled.png"),
-    text: "Styled-components",
-  },
-  {
-    image: require("../assets/logo-figma.png"),
-    text: "Figma",
-  },
-  {
-    image: require("../assets/graphql.png"),
-    text: "GraphQL",
-  },
-  {
-    image: require("../assets/firebase.png"),
-    text: "Firebase",
-  },
-];
-
-const courses = [
-  {
-    title: "React from scratch",
-    subtitle: "12 sections",
-    image: require("../assets/background3.jpg"),
-    logo: require("../assets/logo-react.png"),
-    author: "Richard DLeon",
-    avatar: require("../assets/avatar.jpg"),
-    caption: "Complete guide to learn how to work with the React library",
-  },
-  {
-    title: "Database with Firebase",
-    subtitle: "8 sections",
-    image: require("../assets/background14.jpg"),
-    logo: require("../assets/firebase.png"),
-    author: "Richard DLeon",
-    avatar: require("../assets/avatar.jpg"),
-    caption: "Learn how to create a database for your projects using Firebase",
-  },
-  {
-    title: "GraphQL for beginners",
-    subtitle: "10 sections",
-    image: require("../assets/background16.jpg"),
-    logo: require("../assets/graphql.png"),
-    author: "Richard DLeon",
-    avatar: require("../assets/avatar.jpg"),
-    caption:
-      "Know the most used query language for client-server communication",
-  },
-  {
-    title: "Design System in Figma",
-    subtitle: "13 sections",
-    image: require("../assets/background6.jpg"),
-    logo: require("../assets/logo-figma.png"),
-    author: "Richard DLeon",
-    avatar: require("../assets/avatar.jpg"),
-    caption:
-      "Complete guide to designing a site using a collaborative design tool",
-  },
-];

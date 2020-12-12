@@ -4,6 +4,7 @@ import { PanResponder, Animated } from "react-native";
 import { useSelector } from "react-redux";
 
 import Project from "../components/Project";
+import { projects } from "../components/LocalData";
 
 function getNextIndex(index) {
   let nextIndex = index + 1;
@@ -186,27 +187,3 @@ const Container = styled.View`
   align-items: center;
   background: #f0f3f5;
 `;
-
-const projects = [
-  {
-    title: "Courses - mock app for learning",
-    image: require("../assets/background5.jpg"),
-    author: "Ricardo De Leon",
-    text:
-      "Thanks to Design+Code, I improve my design skill and learned to do animations for my app Courses, a mock app for my portfolio. Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.",
-  },
-  {
-    title: "Wonder App - vodka reviews",
-    image: require("../assets/background6.jpg"),
-    author: "Nikolai belinski",
-    text:
-      "I went from knowing nothing about design or code to building a production ready app from scratch, tanks to Design+Code. ",
-  },
-  {
-    title: "workout time - exercise videos app",
-    image: require("../assets/background7.jpg"),
-    author: "Julius Reinhold",
-    text:
-      "Recently finished the React course. I already rewrote my personal website in @WorkoutTime and I'm very excited with it.",
-  },
-];
