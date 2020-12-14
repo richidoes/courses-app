@@ -154,6 +154,9 @@ export default function ModalLogin() {
 
           getUser();
           handleUser().updateName(response.user.email);
+          setIconPassword(require("../assets/icon-password.png"));
+          setIconEmail(require("../assets/icon-email.png"));
+          setFormData(initialValue());
 
           setTimeout(() => {
             handleUser().closeLogin();
@@ -211,12 +214,14 @@ export default function ModalLogin() {
           />
           <Text>Start Learning</Text>
           <TextInput
+            value={formData.email}
             placeholder="Email"
             keyboardType="email-address"
             onChange={(e) => onChange(e, "email")}
             onFocus={focusEmail}
           />
           <TextInput
+            value={formData.password}
             placeholder="Password"
             secureTextEntry={true}
             onChange={(e) => onChange(e, "password")}

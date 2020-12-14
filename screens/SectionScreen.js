@@ -78,7 +78,7 @@ const htmlStyles = `
         text-transform: uppercase;
         color: #b8bece;
         font-weight: 600;
-        margin-top: 50px;
+        margin-top: 8px;
       }
     
     	p {
@@ -142,7 +142,7 @@ const Title = styled.Text`
   font-weight: bold;
   width: 170px;
   position: absolute;
-  top: 78px;
+  top: 90px;
   left: 20px;
 `;
 
@@ -172,7 +172,7 @@ const boxShadow = {
 const Wrapper = styled.View`
   flex-direction: row;
   position: absolute;
-  top: 40px;
+  top: 50px;
   left: 20px;
   align-items: center;
 `;
