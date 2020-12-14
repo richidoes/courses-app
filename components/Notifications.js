@@ -10,6 +10,8 @@ import {
 import { Ionicons } from "@expo/vector-icons";
 import { useSelector, useDispatch } from "react-redux";
 
+import { closeNotif } from "../redux/togglesDucks";
+
 const screenWidth = Dimensions.get("window").width;
 let cardWith = screenWidth - 40;
 if (screenWidth > 500) {
@@ -21,27 +23,25 @@ export default function Notifications() {
   const [opacity] = useState(new Animated.Value(0));
   const [top] = useState(new Animated.Value(3000));
 
-  const handleState = useSelector((state) => {
-    return { action: state.action };
-  });
+  const action = useSelector((store) => store.toggle.action);
   const dispatch = useDispatch();
 
   //on update
   useEffect(() => {
     toggleNotif();
-  }, [toggleNotif]);
+  }, [action]);
 
-  function dispatcher() {
-    return {
-      closeNotif: () =>
-        dispatch({
-          type: "CLOSE_NOTIF",
-        }),
-    };
-  }
+  // function dispatcher() {
+  //   return {
+  //     closeNotif: () =>
+  //       dispatch({
+  //         type: "CLOSE_NOTIF",
+  //       }),
+  //   };
+  // }
 
   function toggleNotif() {
-    if (handleState.action == "openNotif") {
+    if (action == "openNotif") {
       Animated.parallel([
         Animated.spring(translateY, {
           toValue: 0,
@@ -60,7 +60,7 @@ export default function Notifications() {
       ]).start();
     }
 
-    if (handleState.action == "closeNotif") {
+    if (action == "closeNotif") {
       Animated.parallel([
         Animated.spring(translateY, {
           toValue: 30,
@@ -83,7 +83,7 @@ export default function Notifications() {
   return (
     <AnimatedContainer style={{ top: top }}>
       <TouchableOpacity
-        onPress={() => dispatcher().closeNotif()}
+        onPress={() => dispatch(closeNotif())}
         style={{
           position: "absolute",
           top: 40,

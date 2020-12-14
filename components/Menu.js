@@ -6,6 +6,8 @@ import { useDispatch, useSelector } from "react-redux";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import MenuItem from "./MenuItem";
+import { closeMenu } from "../redux/togglesDucks";
+import { updateAvatar, updateName } from "../redux/userDucks";
 
 const screenHeight = Dimensions.get("window").height;
 const ScreenWidth = Dimensions.get("window").width;
@@ -18,21 +20,21 @@ if (cardWidth >= 500) {
 const Menu = () => {
   const [top] = useState(new Animated.Value(screenHeight));
 
-  const handleState = useSelector((state) => state.action);
+  const action = useSelector((store) => store.toggle.action);
   const dispatch = useDispatch();
 
   useEffect(() => {
     toggleMenu();
-  }, [handleState]);
+  }, [action]);
 
   const toggleMenu = () => {
-    if (handleState == "openMenu") {
+    if (action == "openMenu") {
       Animated.spring(top, {
         toValue: 54,
         useNativeDriver: false,
       }).start();
     }
-    if (handleState == "closeMenu") {
+    if (action == "closeMenu") {
       Animated.spring(top, {
         toValue: 1200, //this instead of screen height because a problem at close
         useNativeDriver: false,
@@ -40,29 +42,31 @@ const Menu = () => {
     }
   };
 
-  const handleMenu = () => {
-    return {
-      closeMenu: () => dispatch({ type: "CLOSE_MENU" }),
-      updateName: (name) => {
-        dispatch({
-          type: "UPDATE_NAME",
-          name,
-        });
-      },
-      updateAvatar: (avatar) =>
-        dispatch({
-          type: "UPDATE_AVATAR",
-          avatar,
-        }),
-    };
-  };
+  // const handleMenu = () => {
+  //   return {
+  //     closeMenu: () => dispatch({ type: "CLOSE_MENU" }),
+  //     updateName: (name) => {
+  //       dispatch({
+  //         type: "UPDATE_NAME",
+  //         name,
+  //       });
+  //     },
+  //     updateAvatar: (avatar) =>
+  //       dispatch({
+  //         type: "UPDATE_AVATAR",
+  //         avatar,
+  //       }),
+  //   };
+  // };
 
   const handleLogout = (index) => {
     if (index === 3) {
-      handleMenu().closeMenu();
-      handleMenu().updateName("Stranger");
-      handleMenu().updateAvatar(
-        "https://share.getcloudapp.com/bLu0r6GN/download/avatar-default.jpg?k=7987709d&utm_source=viewer_new"
+      dispatch(closeMenu());
+      dispatch(updateName("Stranger"));
+      dispatch(
+        updateAvatar(
+          "https://share.getcloudapp.com/bLu0r6GN/download/avatar-default.jpg?k=7987709d&utm_source=viewer_new"
+        )
       );
       AsyncStorage.clear();
     }
@@ -76,7 +80,7 @@ const Menu = () => {
         <Subtitle>Developer that Design</Subtitle>
       </Cover>
       <TouchableOpacity
-        onPress={() => handleMenu().closeMenu()}
+        onPress={() => dispatch(closeMenu())}
         style={{
           position: "absolute",
           top: 120,

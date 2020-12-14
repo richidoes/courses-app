@@ -17,6 +17,8 @@ import { auth } from "./Firebase";
 import Success from "./Success";
 import Loading from "./Loading";
 import { saveState } from "./AsyncStorage";
+import { updateAvatar, updateName } from "../redux/userDucks";
+import { closeLogin } from "../redux/togglesDucks";
 
 const screenHeight = Dimensions.get("window").height;
 
@@ -35,11 +37,7 @@ export default function ModalLogin() {
   const [translateY] = useState(new Animated.Value(0));
   const [randomUser] = useState(rng(1, 11));
 
-  const handleState = useSelector((state) => {
-    return {
-      action: state.action,
-    };
-  });
+  const action = useSelector((store) => store.toggle.action);
   const dispatch = useDispatch();
 
   //random number generator
@@ -52,7 +50,7 @@ export default function ModalLogin() {
       const name = await AsyncStorage.getItem("name");
       if (name !== null) {
         console.log(name);
-        handleUser().updateName(name);
+        dispatch(updateName(name));
       }
     } catch (error) {
       console.log(error);
@@ -66,7 +64,7 @@ export default function ModalLogin() {
 
   //animation changes
   useEffect(() => {
-    if (handleState.action === "openLogin") {
+    if (action === "openLogin") {
       Animated.timing(top, {
         toValue: 0,
         duration: 0,
@@ -84,7 +82,7 @@ export default function ModalLogin() {
         useNativeDriver: false,
       }).start();
     }
-    if (handleState.action === "closeLogin") {
+    if (action === "closeLogin") {
       setTimeout(() => {
         Animated.timing(top, {
           toValue: screenHeight,
@@ -104,27 +102,27 @@ export default function ModalLogin() {
       }).start();
     }
     return () => {};
-  }, [handleState]);
+  }, [action]);
 
-  function handleUser() {
-    return {
-      closeLogin: () =>
-        dispatch({
-          type: "CLOSE_LOGIN",
-        }),
-      updateName: (name) => {
-        dispatch({
-          type: "UPDATE_NAME",
-          name,
-        });
-      },
-      updateAvatar: (avatar) =>
-        dispatch({
-          type: "UPDATE_AVATAR",
-          avatar,
-        }),
-    };
-  }
+  // function handleUser() {
+  //   return {
+  //     closeLogin: () =>
+  //       dispatch({
+  //         type: "CLOSE_LOGIN",
+  //       }),
+  //     updateName: (name) => {
+  //       dispatch({
+  //         type: "UPDATE_NAME",
+  //         name,
+  //       });
+  //     },
+  //     updateAvatar: (avatar) =>
+  //       dispatch({
+  //         type: "UPDATE_AVATAR",
+  //         avatar,
+  //       }),
+  //   };
+  // }
 
   //api req
   function getUser() {
@@ -134,7 +132,7 @@ export default function ModalLogin() {
       const avatar = userData.avatar;
 
       saveState({ name, avatar });
-      handleUser().updateAvatar(avatar);
+      dispatch(updateAvatar(avatar));
     });
   }
 
@@ -150,19 +148,18 @@ export default function ModalLogin() {
         if (response) {
           setIsSuccessful(true);
 
-          Alert.alert("Congrats", "You've logged Successfully!");
-
           getUser();
-          handleUser().updateName(response.user.email);
+          dispatch(updateName(response.user.email));
           setIconPassword(require("../assets/icon-password.png"));
           setIconEmail(require("../assets/icon-email.png"));
           setFormData(initialValue());
 
           setTimeout(() => {
-            handleUser().closeLogin();
+            dispatch(closeLogin());
             setIsSuccessful(false);
           }, 1000);
         }
+        Alert.alert("Congrats", "You've logged Successfully!");
       })
       .catch((error) => {
         setIsLoading(false);
@@ -189,7 +186,7 @@ export default function ModalLogin() {
     Keyboard.dismiss();
     setIconPassword(require("../assets/icon-password.png"));
     setIconEmail(require("../assets/icon-email.png"));
-    handleUser().closeLogin();
+    dispatch(closeLogin());
   }
 
   return (

@@ -17,21 +17,21 @@ const CLOSE_NOTIF = "CLOSE_NOTIF";
 export default function togglesReducer(state = initialState, action) {
   switch (action.type) {
     case CLOSE_MENU:
-      return { ...state, ...action.payload };
+      return { ...state, action: action.payload };
     case OPEN_MENU:
-      return { ...state, ...action.payload };
+      return { ...state, action: action.payload };
     case OPEN_CARD:
-      return { ...state, ...action.payload };
+      return { ...state, action: action.payload };
     case CLOSE_CARD:
-      return { ...state, ...action.payload };
+      return { ...state, action: action.payload };
     case OPEN_LOGIN:
-      return { ...state, ...action.payload };
+      return { ...state, action: action.payload };
     case CLOSE_LOGIN:
-      return { ...state, ...action.payload };
+      return { ...state, action: action.payload };
     case OPEN_NOTIF:
-      return { ...state, ...action.payload };
+      return { ...state, action: action.payload };
     case CLOSE_NOTIF:
-      return { ...state, ...action.payload };
+      return { ...state, action: action.payload };
     default:
       return state;
   }
@@ -52,14 +52,14 @@ export const closeMenu = () => (dispatch) => {
   });
 };
 
-export const openCard = () => (dispatch) => {
+export const openCardToggle = () => (dispatch) => {
   dispatch({
     type: "OPEN_CARD",
     payload: "openCard",
   });
 };
 
-export const closeCard = () => (dispatch) => {
+export const closeCardToggle = () => (dispatch) => {
   dispatch({
     type: "CLOSE_CARD",
     payload: "closeCard",

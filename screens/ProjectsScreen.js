@@ -23,9 +23,7 @@ function ProjectsScreen() {
   const [index, setIndex] = useState(0);
   const [opacity] = useState(new Animated.Value(0));
 
-  const handleState = useSelector((state) => {
-    return { action: state.action };
-  });
+  const action = useSelector((store) => store.toggle.action);
 
   //handle the animation of card
   const panRespoder = PanResponder.create({
@@ -33,7 +31,7 @@ function ProjectsScreen() {
       //this allows us to move the card if not positioned 0px or is opened
       if (gestureState.dx === 0 && gestureState.dy === 0) {
         return false;
-      } else if (handleState.action === "openCard") {
+      } else if (action === "openCard") {
         return false;
       } else {
         return true;

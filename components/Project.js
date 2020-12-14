@@ -12,6 +12,8 @@ import { Ionicons } from "@expo/vector-icons";
 import { useDispatch } from "react-redux";
 import { LinearGradient } from "expo-linear-gradient";
 
+import { openCardToggle, closeCardToggle } from "../redux/togglesDucks";
+
 const screenWidth = Dimensions.get("window").width;
 const screenHeight = Dimensions.get("window").height;
 const tabBarHeight = 83;
@@ -52,9 +54,7 @@ const Project = (props) => {
       useNativeDriver: false,
     }).start();
 
-    dispatch({
-      type: "OPEN_CARD",
-    });
+    dispatch(openCardToggle());
   }
 
   function closeCard() {
@@ -77,9 +77,7 @@ const Project = (props) => {
       useNativeDriver: false,
     }).start();
 
-    dispatch({
-      type: "CLOSE_CARD",
-    });
+    dispatch(closeCardToggle());
   }
 
   return (

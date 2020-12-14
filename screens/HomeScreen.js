@@ -20,6 +20,7 @@ import ModalLogin from "../components/ModalLogin";
 import NotificationButton from "../components/NotificationButton";
 import Notifications from "../components/Notifications";
 import { logos, courses } from "../components/LocalData";
+import { openLogin, openMenu, openNotif } from "../redux/togglesDucks";
 
 const CardsQuery = gql`
   {
@@ -45,12 +46,8 @@ export default function HomeScreen({ navigation }) {
   const [scale] = useState(new Animated.Value(1));
   const [opacity] = useState(new Animated.Value(1));
 
-  const handleState = useSelector((state) => {
-    return {
-      action: state.action,
-      name: state.name,
-    };
-  });
+  const action = useSelector((store) => store.toggle.action);
+  const name = useSelector((store) => store.user.name);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -59,10 +56,10 @@ export default function HomeScreen({ navigation }) {
 
   useEffect(() => {
     toggleMenu();
-  }, [handleState]);
+  }, [action]);
 
   const toggleMenu = () => {
-    if (handleState.action == "openMenu") {
+    if (action == "openMenu") {
       Animated.timing(scale, {
         toValue: 0.9,
         duration: 300,
@@ -76,7 +73,7 @@ export default function HomeScreen({ navigation }) {
 
       StatusBar.setBarStyle("light-content", true);
     }
-    if (handleState.action == "closeMenu") {
+    if (action == "closeMenu") {
       Animated.timing(scale, {
         toValue: 1,
         duration: 300,
@@ -124,19 +121,19 @@ export default function HomeScreen({ navigation }) {
     );
   };
 
-  const dispatcher = () => {
-    return {
-      openMenu: () => dispatch({ type: "OPEN_MENU" }),
-      openLogin: () => dispatch({ type: "OPEN_LOGIN" }),
-      openNotif: () => dispatch({ type: "OPEN_NOTIF" }),
-    };
-  };
+  // const dispatcher = () => {
+  //   return {
+  //     openMenu: () => dispatch({ type: "OPEN_MENU" }),
+  //     openLogin: () => dispatch({ type: "OPEN_LOGIN" }),
+  //     openNotif: () => dispatch({ type: "OPEN_NOTIF" }),
+  //   };
+  // };
 
   const handleAvatar = () => {
-    if (handleState.name !== "Stranger") {
-      dispatcher().openMenu();
+    if (name !== "Stranger") {
+      dispatch(openMenu());
     } else {
-      dispatcher().openLogin();
+      dispatch(openLogin());
     }
   };
   return (
@@ -156,9 +153,9 @@ export default function HomeScreen({ navigation }) {
                 <Avatar />
               </TouchableOpacity>
               <Title>Welcome back</Title>
-              <Name>{handleState.name}</Name>
+              <Name>{name}</Name>
               <TouchableOpacity
-                onPress={() => dispatcher().openNotif()}
+                onPress={() => dispatch(openNotif())}
                 style={{ position: "absolute", right: 20, top: 5 }}
               >
                 <NotificationButton />
