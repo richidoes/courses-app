@@ -19,7 +19,7 @@ const screenHeight = Dimensions.get("window").height;
 const tabBarHeight = 83;
 
 const Project = (props) => {
-  const [cardWidth] = useState(new Animated.Value(315));
+  const [cardWidth] = useState(new Animated.Value(340));
   const [cardHeight] = useState(new Animated.Value(460));
   const [titleTop] = useState(new Animated.Value(20));
   const [opacity] = useState(new Animated.Value(0));
@@ -61,7 +61,7 @@ const Project = (props) => {
     if (Platform.OS === "ios") StatusBar.setHidden(false);
 
     Animated.spring(cardWidth, {
-      toValue: 315,
+      toValue: 340,
       useNativeDriver: false,
     }).start();
 
@@ -96,7 +96,7 @@ const Project = (props) => {
             colors={["rgba(255, 255, 255, 0)", "rgba(255, 255, 255, 1)"]}
             style={{
               position: "absolute",
-              top: -95,
+              top: -117,
               width: "100%",
               height: "100%",
             }}

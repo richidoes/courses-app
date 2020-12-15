@@ -36,6 +36,7 @@ export default function ModalLogin() {
   const [scale] = useState(new Animated.Value(1.3));
   const [translateY] = useState(new Animated.Value(0));
   const [randomUser] = useState(rng(1, 11));
+  const [showPass, setShowPass] = useState(false);
 
   const action = useSelector((store) => store.toggle.action);
   const dispatch = useDispatch();
@@ -104,26 +105,6 @@ export default function ModalLogin() {
     return () => {};
   }, [action]);
 
-  // function handleUser() {
-  //   return {
-  //     closeLogin: () =>
-  //       dispatch({
-  //         type: "CLOSE_LOGIN",
-  //       }),
-  //     updateName: (name) => {
-  //       dispatch({
-  //         type: "UPDATE_NAME",
-  //         name,
-  //       });
-  //     },
-  //     updateAvatar: (avatar) =>
-  //       dispatch({
-  //         type: "UPDATE_AVATAR",
-  //         avatar,
-  //       }),
-  //   };
-  // }
-
   //api req
   function getUser() {
     axios.get(`https://reqres.in/api/users/${randomUser}`).then((user) => {
@@ -159,7 +140,6 @@ export default function ModalLogin() {
             setIsSuccessful(false);
           }, 1000);
         }
-        Alert.alert("Congrats", "You've logged Successfully!");
       })
       .catch((error) => {
         setIsLoading(false);
@@ -186,6 +166,7 @@ export default function ModalLogin() {
     Keyboard.dismiss();
     setIconPassword(require("../assets/icon-password.png"));
     setIconEmail(require("../assets/icon-email.png"));
+    setFormData(initialValue());
     dispatch(closeLogin());
   }
 
@@ -220,12 +201,18 @@ export default function ModalLogin() {
           <TextInput
             value={formData.password}
             placeholder="Password"
-            secureTextEntry={true}
+            secureTextEntry={showPass ? true : false}
             onChange={(e) => onChange(e, "password")}
             onFocus={focusPassword}
           />
+
           <IconEmail source={iconEmail} resizeMode="contain" />
-          <IconPassword source={iconPassword} resizeMode="contain" />
+          <TouchableOpacity
+            onPress={() => setShowPass(!showPass)}
+            style={{ position: "absolute", top: 229, left: 35 }}
+          >
+            <IconPassword source={iconPassword} resizeMode="contain" />
+          </TouchableOpacity>
           <TouchableOpacity onPress={handleLogin}>
             <Button style={{ elevation: 8 }}>
               <ButtonText>Log in</ButtonText>
@@ -326,7 +313,4 @@ const IconEmail = styled.Image`
 const IconPassword = styled.Image`
   width: 18px;
   height: 24px;
-  position: absolute;
-  top: 229px;
-  left: 35px;
 `;

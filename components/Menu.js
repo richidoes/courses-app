@@ -8,6 +8,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import MenuItem from "./MenuItem";
 import { closeMenu } from "../redux/togglesDucks";
 import { updateAvatar, updateName } from "../redux/userDucks";
+import { options } from "./LocalData";
 
 const screenHeight = Dimensions.get("window").height;
 const ScreenWidth = Dimensions.get("window").width;
@@ -41,23 +42,6 @@ const Menu = () => {
       }).start();
     }
   };
-
-  // const handleMenu = () => {
-  //   return {
-  //     closeMenu: () => dispatch({ type: "CLOSE_MENU" }),
-  //     updateName: (name) => {
-  //       dispatch({
-  //         type: "UPDATE_NAME",
-  //         name,
-  //       });
-  //     },
-  //     updateAvatar: (avatar) =>
-  //       dispatch({
-  //         type: "UPDATE_AVATAR",
-  //         avatar,
-  //       }),
-  //   };
-  // };
 
   const handleLogout = (index) => {
     if (index === 3) {
@@ -94,7 +78,7 @@ const Menu = () => {
         </CloseView>
       </TouchableOpacity>
       <Content>
-        {items.map((item, index) => (
+        {options.map((item, index) => (
           <TouchableOpacity key={index} onPress={() => handleLogout(index)}>
             <MenuItem icon={item.icon} title={item.title} text={item.text} />
           </TouchableOpacity>
@@ -167,26 +151,3 @@ const Content = styled.View`
   background: #f0f3f5;
   padding: 50px;
 `;
-
-const items = [
-  {
-    icon: "ios-settings",
-    title: "Account",
-    text: "settings",
-  },
-  {
-    icon: "ios-albums",
-    title: "certificates",
-    text: "courses completed",
-  },
-  {
-    icon: "ios-analytics",
-    title: "Progress",
-    text: "course progress",
-  },
-  {
-    icon: "ios-exit",
-    title: "Log out",
-    text: "see you soon!",
-  },
-];

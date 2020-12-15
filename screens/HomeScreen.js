@@ -121,14 +121,6 @@ export default function HomeScreen({ navigation }) {
     );
   };
 
-  // const dispatcher = () => {
-  //   return {
-  //     openMenu: () => dispatch({ type: "OPEN_MENU" }),
-  //     openLogin: () => dispatch({ type: "OPEN_LOGIN" }),
-  //     openNotif: () => dispatch({ type: "OPEN_NOTIF" }),
-  //   };
-  // };
-
   const handleAvatar = () => {
     if (name !== "Stranger") {
       dispatch(openMenu());

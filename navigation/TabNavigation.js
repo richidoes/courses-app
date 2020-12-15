@@ -17,8 +17,8 @@ const HomeStack = createStackNavigator(
     Section: SectionScreen,
   },
   {
-    headerMode: "none",
-    mode: "modal",
+    headerMode: "none", //hides header
+    mode: "modal", //show screens in modal mode
   }
 );
 
