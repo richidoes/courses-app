@@ -187,7 +187,7 @@ export default function ModalLogin() {
           }}
         >
           <Logo
-            source={require("../assets/logo-dc.png")}
+            source={require("../assets/logo-rd.png")}
             resizeMode="contain"
           />
           <Text>Start Learning</Text>
