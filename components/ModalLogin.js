@@ -36,8 +36,7 @@ export default function ModalLogin() {
   const [scale] = useState(new Animated.Value(1.3));
   const [translateY] = useState(new Animated.Value(0));
   const [randomUser] = useState(rng(1, 11));
-  const [showPass, setShowPass] = useState(false);
-
+  const [noShowPass, setNoShowPass] = useState(true);
   const action = useSelector((store) => store.toggle.action);
   const dispatch = useDispatch();
 
@@ -201,14 +200,14 @@ export default function ModalLogin() {
           <TextInput
             value={formData.password}
             placeholder="Password"
-            secureTextEntry={showPass ? true : false}
+            secureTextEntry={noShowPass}
             onChange={(e) => onChange(e, "password")}
             onFocus={focusPassword}
           />
 
           <IconEmail source={iconEmail} resizeMode="contain" />
           <TouchableOpacity
-            onPress={() => setShowPass(!showPass)}
+            onPress={() => setNoShowPass(!noShowPass)}
             style={{ position: "absolute", top: 229, left: 35 }}
           >
             <IconPassword source={iconPassword} resizeMode="contain" />
