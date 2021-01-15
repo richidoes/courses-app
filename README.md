@@ -1,9 +1,17 @@
 # Courses-app
 
-Aplicación Web que nos muestra un listado de pokemones traido de una
-Api externa (pokeapi.co), podremos ver algunos de los atributos y la apariencia del pokemon que seleccionemos.
+Aplicación móvil que simula una aplicacion de aprendizaje, ¡disfruta
+de animaciones al registrarte, mirar la configuracion, mirar las
+notificaciones y más!
 
-La web utiliza un sistema de rutas protegidas donde solo el usuario registrado tiene acceso al listado asi como a otras caracteristicas como cambiar su foto de perfil y su nombre de usuario.
+Podremos encontrar secciones como :
+
+Inicio/Home donde podremos registrarnos/cerrar
+sesión tocando el avatar y ver nuestras notificaciones tocando la
+campana, asi como abrir las tarjetas.
+
+Cursos/Courses con tarjetas con el progreso actual de tus cursos.
+Proyectos/projects con tarjetas adaptables y una animacion arrastar y soltar.
 
 ------------------- INSTRUCCIONES DE USO -------------------------------
 
