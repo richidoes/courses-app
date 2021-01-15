@@ -1,5 +1,4 @@
 node_modules/**/*
-components/Firebase.js
 .expo/*
 npm-debug.*
 *.jks
